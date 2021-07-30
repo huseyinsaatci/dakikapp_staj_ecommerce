@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "user", schema = "dakikapp")
@@ -12,6 +13,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private int id;
+    @NotBlank(message = "Cannot be blank")
     private String firstname, lastname, email, phone_number, password;
 
     public User() {
@@ -57,11 +59,11 @@ public class User {
         this.email = email;
     }
 
-    public String getPhonenumber() {
+    public String getPhone_number() {
         return phone_number;
     }
 
-    public void setPhonenumber(String phoneNumber) {
+    public void setPhone_number(String phoneNumber) {
         this.phone_number = phoneNumber;
     }
 

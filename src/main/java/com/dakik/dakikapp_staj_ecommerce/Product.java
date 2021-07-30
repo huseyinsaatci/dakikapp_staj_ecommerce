@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "product", schema = "dakikapp")
@@ -12,16 +14,19 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private int id;
-    private int product_code;
-    private String product_name, image_url;
+    @NotNull(message = "'productcode' cannot be null")
+    private int productcode;
+    @NotEmpty(message = "'productname' cannot be empty")
+    private String productname;
+    private String imageurl;
 
     public Product() {
     }
 
-    public Product(int product_code, String product_name, String image_url) {
-        this.product_code = product_code;
-        this.product_name = product_name;
-        this.image_url = image_url;
+    public Product(int productcode, String productname, String imageurl) {
+        this.productcode = productcode;
+        this.productname = productname;
+        this.imageurl = imageurl;
     }
 
     public int getId() {
@@ -32,28 +37,28 @@ public class Product {
         this.id = id;
     }
 
-    public int getProduct_code() {
-        return product_code;
+    public int getProductCode() {
+        return productcode;
     }
 
-    public void setProduct_code(int product_code) {
-        this.product_code = product_code;
+    public void setProductCode(int productCode) {
+        this.productcode = productCode;
     }
 
-    public String getProduct_name() {
-        return product_name;
+    public String getProductName() {
+        return productname;
     }
 
-    public void setProduct_name(String product_name) {
-        this.product_name = product_name;
+    public void setProductName(String productName) {
+        this.productname = productName;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public String getImageUrl() {
+        return imageurl;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
+    public void setImageUrl(String imageurl) {
+        this.imageurl = imageurl;
     }
 
 }
