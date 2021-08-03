@@ -4,8 +4,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProductService {
-    public boolean checkIfProductAlreadyExist(Product p, ProductRepository rep) {
-        return (rep.findByProductcode(p.getProductCode())
-                .orElseThrow(() -> new ProductAlreadyExistException(p.getProductCode()))) != null;
+    protected NotFoundException throwProductNotFoundException(int id) {
+        return new NotFoundException("Could not find product, ID:" + id);
     }
 }
