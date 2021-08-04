@@ -1,4 +1,4 @@
-package com.dakik.dakikapp_staj_ecommerce;
+package com.dakik.dakikapp_staj_ecommerce.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

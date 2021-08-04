@@ -1,9 +1,9 @@
-package com.dakik.dakikapp_staj_ecommerce;
+package com.dakik.dakikapp_staj_ecommerce.exception;
 
 import org.springframework.core.NestedRuntimeException;
 
 public class NotAuthorizedException extends NestedRuntimeException {
-    NotAuthorizedException(String message) {
+    public NotAuthorizedException(String message) {
         super(message);
     }
 }

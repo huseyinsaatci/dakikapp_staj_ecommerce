@@ -1,4 +1,4 @@
-package com.dakik.dakikapp_staj_ecommerce;
+package com.dakik.dakikapp_staj_ecommerce.exception;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.core.NestedRuntimeException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
@@ -26,14 +25,12 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String STATUS = "status";
     private static final String TIMESTAMP = "timestamp";
     private static final String TYPE = "type";
-    private static final String OPERATION = "operation";
 
-    protected static ResponseEntity<Object> getSuccessfulResponseEntity(final WebRequest r) {
+    public static ResponseEntity<Object> getSuccessfulResponseEntity(final WebRequest r) {
         final Map<String, Object> body = new LinkedHashMap<>();
         ServletWebRequest request = (ServletWebRequest) r;
         body.put(TIMESTAMP, Instant.now());
         body.put(STATUS, HttpStatus.OK.value());
-        body.put(OPERATION, request.getHttpMethod());
         body.put(PATH, request.getRequest().getRequestURI().toString());
         return new ResponseEntity<Object>(body, HttpStatus.OK);
     }
