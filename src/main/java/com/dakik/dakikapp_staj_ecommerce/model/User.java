@@ -1,5 +1,6 @@
 package com.dakik.dakikapp_staj_ecommerce.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,72 +8,35 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "user", schema = "dakikapp")
 public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private int id;
-    @NotBlank(message = "Cannot be blank")
-    private String firstname, lastname, email, phone_number, password;
 
-    public User() {
-    }
+    @Column(name = "first_name")
+    @NotBlank(message = "'first_name' cannot be blank")
+    private String firstName;
 
-    public User(String firstName, String lastName, String email, String phoneNumber, String password) {
-        this.firstname = firstName;
-        this.lastname = lastName;
-        this.email = email;
-        this.phone_number = phoneNumber;
-        this.password = password;
-    }
+    @Column(name = "last_name")
+    @NotBlank(message = "'last_name'cannot be blank")
+    private String lastName;
 
-    public int getId() {
-        return id;
-    }
+    @NotBlank(message = "'email' cannot be blank")
+    private String email;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    @Column(name = "phone_number")
+    @NotBlank(message = "'phone_number' cannot be blank")
+    private String phoneNumber;
 
-    public String getFirstname() {
-        return firstname;
-    }
+    @NotBlank(message = "'password' cannot be blank")
+    private String password;
 
-    public void setFirstname(String firstName) {
-        this.firstname = firstName;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastName) {
-        this.lastname = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone_number() {
-        return phone_number;
-    }
-
-    public void setPhone_number(String phoneNumber) {
-        this.phone_number = phoneNumber;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
+    // Password confirm
 }

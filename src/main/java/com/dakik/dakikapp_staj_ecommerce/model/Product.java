@@ -1,5 +1,6 @@
 package com.dakik.dakikapp_staj_ecommerce.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,58 +8,34 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "product", schema = "dakikapp")
 public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private int id;
+
+    @Column(name = "product_code")
     @NotNull(message = "'productcode' cannot be null")
-    private int productcode;
+    private int productCode;
+
+    @Column(name = "product_name")
     @NotEmpty(message = "'productname' cannot be empty")
-    private String productname;
-    private String imageurl;
+    private String productName;
 
-    public Product() {
-    }
+    @Column(name = "image_url")
+    private String imageUrl;
 
-    public Product(int productcode, String productname, String imageurl) {
-        this.productcode = productcode;
-        this.productname = productname;
-        this.imageurl = imageurl;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getProductCode() {
-        return productcode;
-    }
-
-    public void setProductCode(int productCode) {
-        this.productcode = productCode;
-    }
-
-    public String getProductName() {
-        return productname;
-    }
-
-    public void setProductName(String productName) {
-        this.productname = productName;
-    }
-
-    public String getImageUrl() {
-        return imageurl;
-    }
-
-    public void setImageUrl(String imageurl) {
-        this.imageurl = imageurl;
-    }
-
+    // Stockquantity stock > 0
+    @PositiveOrZero
+    @NotNull
+    @Column(name = "stock_quantity")
+    private int stockQuantity;
 }

@@ -12,9 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.Valid;
 
-import com.dakik.dakikapp_staj_ecommerce.exception.GeneralExceptionHandler;
 import com.dakik.dakikapp_staj_ecommerce.model.Product;
-import com.dakik.dakikapp_staj_ecommerce.repository.ProductRepository;
 import com.dakik.dakikapp_staj_ecommerce.service.ProductService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,31 +23,25 @@ import org.springframework.http.ResponseEntity;
 @RestController
 public class ProductController {
     @Autowired
-    private ProductRepository rep;
-
-    @Autowired
     private ProductService productService;
 
     @GetMapping()
-    public Iterable<Product> getProductList() {
-        return rep.findAll();
+    public ResponseEntity<Object> getProductList() {
+        return productService.getProductList();
     }
 
     @GetMapping("/{id}")
-    public Product getProduct(@PathVariable int id) {
-        return rep.findById(id).orElseThrow(() -> productService.throwProductNotFoundException(id));
+    public ResponseEntity<Object> getProduct(@PathVariable int id) {
+        return productService.getProduct(id);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable int id, WebRequest request) {
-        Product p = rep.findById(id).orElseThrow(() -> productService.throwProductNotFoundException(id));
-        rep.delete(p);
-        return GeneralExceptionHandler.getSuccessfulResponseEntity(request);
+        return productService.deleteProduct(id);
     }
 
     @PostMapping()
     public ResponseEntity<Object> addProduct(@Valid @RequestBody Product p, WebRequest request) {
-        rep.save(p);
-        return GeneralExceptionHandler.getSuccessfulResponseEntity(request);
+        return productService.addProduct(p);
     }
 }
