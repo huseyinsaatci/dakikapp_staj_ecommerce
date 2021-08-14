@@ -12,7 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.Valid;
 
-import com.dakik.dakikapp_staj_ecommerce.model.Product;
+import com.dakik.dakikapp_staj_ecommerce.dto.ProductDto;
 import com.dakik.dakikapp_staj_ecommerce.service.ProductService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity<Object> addProduct(@Valid @RequestBody Product p, WebRequest request) {
+    public ResponseEntity<Object> addProduct(@Valid @RequestBody ProductDto p, WebRequest request) {
         return productService.addProduct(p);
     }
 }

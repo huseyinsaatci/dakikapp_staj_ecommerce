@@ -37,6 +37,4 @@ public class User {
 
     @NotBlank(message = "'password' cannot be blank")
     private String password;
-
-    // Password confirm
 }

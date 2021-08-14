@@ -17,4 +17,8 @@ public class ErrorResponse {
     public void addSubError(String err) {
         subErrors.add(err);
     }
+
+    public boolean hasError() {
+        return !subErrors.isEmpty();
+    }
 }

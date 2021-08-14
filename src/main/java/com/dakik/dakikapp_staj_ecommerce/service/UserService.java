@@ -1,20 +1,29 @@
 package com.dakik.dakikapp_staj_ecommerce.service;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.dakik.dakikapp_staj_ecommerce.model.User;
+import com.dakik.dakikapp_staj_ecommerce.dto.UserDto;
+import com.dakik.dakikapp_staj_ecommerce.mapper.UserMapper;
 import com.dakik.dakikapp_staj_ecommerce.repository.UserRepository;
 import com.dakik.dakikapp_staj_ecommerce.util.ErrorResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
     @Autowired
     private UserRepository rep;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    UserMapper mapper;
 
     private Object response;
     private HttpStatus statusCode;
@@ -31,13 +40,15 @@ public class UserService {
         return rep.findByPhoneNumber(phoneNumber).isEmpty();
     }
 
-    public Iterable<User> getAllUsers() {
-        return rep.findAll();
+    public ResponseEntity<Object> getAllUsers() {
+        List<UserDto> users = new ArrayList<>();
+        rep.findAll().forEach((u) -> users.add(mapper.userToDto(u)));
+        return new ResponseEntity<Object>(users, HttpStatus.OK);
     }
 
     public ResponseEntity<Object> getUser(int id) {
         rep.findById(id).ifPresentOrElse(user -> {
-            response = user;
+            response = mapper.userToDto(user);
             statusCode = HttpStatus.OK;
         }, () -> {
             response = new ErrorResponse("User not found");
@@ -48,7 +59,7 @@ public class UserService {
 
     public ResponseEntity<Object> deleteUser(int id) {
         rep.findById(id).ifPresentOrElse(user -> {
-            response = user;
+            response = mapper.userToDto(user);
             statusCode = HttpStatus.OK;
             rep.deleteById(id);
         }, () -> {
@@ -58,36 +69,20 @@ public class UserService {
         return new ResponseEntity<Object>(response, statusCode);
     }
 
-    public ResponseEntity<Object> addUser(User u) {
+    public ResponseEntity<Object> addUser(UserDto u) {
         ErrorResponse error = new ErrorResponse("Duplicate user");
-        boolean errorExist = false;
         if (!isEmailUnique(u.getEmail())) {
             error.addSubError("User already exist with email: " + u.getEmail());
-            errorExist = true;
         }
         if (!isFullNameUnique(u.getFirstName(), u.getLastName())) {
             error.addSubError("User already exist with name: " + u.getFirstName() + " " + u.getLastName());
-            errorExist = true;
         }
         if (!isPhoneNumberUnique(u.getPhoneNumber())) {
             error.addSubError("User already exist with phone number: " + u.getPhoneNumber());
-            errorExist = true;
         }
-        if (errorExist)
+        if (error.hasError())
             return new ResponseEntity<Object>(error, HttpStatus.CONFLICT);
-        return new ResponseEntity<Object>(rep.save(u), HttpStatus.CREATED);
-    }
-
-    public ResponseEntity<Object> logIn(String email, String password, String passwordRetype) {
-        ErrorResponse error = new ErrorResponse("Login error");
-        Optional<User> user = rep.findByEmail(email);
-        if (!password.equals(passwordRetype)) {
-            error.addSubError("Password fields doesn't match");
-        } else if (user.isEmpty() || !user.get().getPassword().equals(password)) {
-            error.addSubError("Invalid email address or password");
-        } else {
-            return new ResponseEntity<Object>("Logged in successfully", HttpStatus.CREATED);
-        }
-        return new ResponseEntity<Object>(error, HttpStatus.UNAUTHORIZED);
+        u.setPassword(passwordEncoder.encode(u.getPassword()));
+        return new ResponseEntity<Object>(mapper.userToDto(rep.save(mapper.dtoToUser(u))), HttpStatus.CREATED);
     }
 }

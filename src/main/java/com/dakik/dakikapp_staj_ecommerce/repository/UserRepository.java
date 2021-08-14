@@ -14,7 +14,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     Optional<User> findByLastName(String lastName);
 
-    @Query(value = "FROM User u WHERE u.firstName =?1 AND u.lastName =?2")
+    @Query(value = "FROM User WHERE firstName =?1 AND lastName =?2")
     Optional<User> findByFullName(String firstName, String lastName);
 
     Optional<User> findByPhoneNumber(String phoneNumber);
