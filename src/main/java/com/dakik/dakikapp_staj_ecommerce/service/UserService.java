@@ -5,6 +5,9 @@ import java.util.List;
 
 import com.dakik.dakikapp_staj_ecommerce.dto.UserDto;
 import com.dakik.dakikapp_staj_ecommerce.mapper.UserMapper;
+import com.dakik.dakikapp_staj_ecommerce.model.Cart;
+import com.dakik.dakikapp_staj_ecommerce.model.User;
+import com.dakik.dakikapp_staj_ecommerce.repository.CartRepository;
 import com.dakik.dakikapp_staj_ecommerce.repository.UserRepository;
 import com.dakik.dakikapp_staj_ecommerce.util.ErrorResponse;
 
@@ -17,38 +20,41 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     @Autowired
-    private UserRepository rep;
+    private UserRepository userRepo;
+
+    @Autowired
+    private CartRepository cartRepo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    UserMapper mapper;
+    private UserMapper userMapper;
 
     private Object response;
     private HttpStatus statusCode;
 
     private boolean isEmailUnique(String email) {
-        return rep.findByEmail(email).isEmpty();
+        return userRepo.findByEmail(email).isEmpty();
     }
 
     private boolean isFullNameUnique(String firstName, String lastName) {
-        return rep.findByFullName(firstName, lastName).isEmpty();
+        return userRepo.findByFullName(firstName, lastName).isEmpty();
     }
 
     private boolean isPhoneNumberUnique(String phoneNumber) {
-        return rep.findByPhoneNumber(phoneNumber).isEmpty();
+        return userRepo.findByPhoneNumber(phoneNumber).isEmpty();
     }
 
     public ResponseEntity<Object> getAllUsers() {
         List<UserDto> users = new ArrayList<>();
-        rep.findAll().forEach((u) -> users.add(mapper.userToDto(u)));
+        userRepo.findActiveAll().forEach((u) -> users.add(userMapper.userToDto(u)));
         return new ResponseEntity<Object>(users, HttpStatus.OK);
     }
 
     public ResponseEntity<Object> getUser(int id) {
-        rep.findById(id).ifPresentOrElse(user -> {
-            response = mapper.userToDto(user);
+        userRepo.findById(id).ifPresentOrElse(user -> {
+            response = userMapper.userToDto(user);
             statusCode = HttpStatus.OK;
         }, () -> {
             response = new ErrorResponse("User not found");
@@ -58,10 +64,11 @@ public class UserService {
     }
 
     public ResponseEntity<Object> deleteUser(int id) {
-        rep.findById(id).ifPresentOrElse(user -> {
-            response = mapper.userToDto(user);
+        userRepo.findById(id).ifPresentOrElse(user -> {
+            response = userMapper.userToDto(user);
             statusCode = HttpStatus.OK;
-            rep.deleteById(id);
+            userRepo.setUserPassive(id);
+            cartRepo.setCartPassiveWithUserId(id);
         }, () -> {
             response = new ErrorResponse("User not found");
             statusCode = HttpStatus.NOT_FOUND;
@@ -83,6 +90,8 @@ public class UserService {
         if (error.hasError())
             return new ResponseEntity<Object>(error, HttpStatus.CONFLICT);
         u.setPassword(passwordEncoder.encode(u.getPassword()));
-        return new ResponseEntity<Object>(mapper.userToDto(rep.save(mapper.dtoToUser(u))), HttpStatus.CREATED);
+        User createdUser = userRepo.save(userMapper.dtoToUser(u).setActive());
+        cartRepo.save(new Cart(createdUser.getId(), 0));
+        return new ResponseEntity<Object>(userMapper.userToDto(createdUser), HttpStatus.CREATED);
     }
 }

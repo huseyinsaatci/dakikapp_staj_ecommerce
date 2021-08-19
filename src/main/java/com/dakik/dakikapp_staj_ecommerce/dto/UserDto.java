@@ -12,7 +12,7 @@ public class UserDto {
     @NotBlank(message = "'first_name' cannot be blank")
     private String firstName;
 
-    @NotBlank(message = "'last_name'cannot be blank")
+    @NotBlank(message = "'last_name' cannot be blank")
     private String lastName;
 
     @NotBlank(message = "'email' cannot be blank")

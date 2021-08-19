@@ -4,6 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 *.properties
+*.sql
 
 ### STS ###
 .apt_generated

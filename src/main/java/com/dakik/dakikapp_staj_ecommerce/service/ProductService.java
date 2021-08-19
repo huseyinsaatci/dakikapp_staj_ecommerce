@@ -16,31 +16,31 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductService {
     @Autowired
-    private ProductRepository rep;
+    private ProductRepository productRepo;
 
     @Autowired
-    private ProductMapper mapper;
+    private ProductMapper productMapper;
 
     private Object response;
     private HttpStatus statusCode;
 
     private boolean isProductCodeUnique(int productCode) {
-        return rep.findByProductCode(productCode).isEmpty();
+        return productRepo.findByProductCode(productCode).isEmpty();
     }
 
     private boolean isProductNameUnique(String productName) {
-        return rep.findByProductName(productName).isEmpty();
+        return productRepo.findByProductName(productName).isEmpty();
     }
 
     public ResponseEntity<Object> getProductList() {
         List<ProductDto> users = new ArrayList<>();
-        rep.findAll().forEach((p) -> users.add(mapper.productToDto(p)));
+        productRepo.findActiveAll().forEach((p) -> users.add(productMapper.productToDto(p)));
         return new ResponseEntity<Object>(users, HttpStatus.OK);
     }
 
     public ResponseEntity<Object> getProduct(int id) {
-        rep.findById(id).ifPresentOrElse(product -> {
-            response = mapper.productToDto(product);
+        productRepo.findActiveById(id).ifPresentOrElse(product -> {
+            response = productMapper.productToDto(product);
             statusCode = HttpStatus.OK;
         }, () -> {
             response = new ErrorResponse("Product not found");
@@ -50,10 +50,10 @@ public class ProductService {
     }
 
     public ResponseEntity<Object> deleteProduct(int id) {
-        rep.findById(id).ifPresentOrElse(product -> {
-            response = mapper.productToDto(product);
+        productRepo.findById(id).ifPresentOrElse(product -> {
+            response = productMapper.productToDto(product);
             statusCode = HttpStatus.OK;
-            rep.deleteById(id);
+            productRepo.setProductPassive(id);
         }, () -> {
             response = new ErrorResponse("Product not found");
             statusCode = HttpStatus.NOT_FOUND;
@@ -71,6 +71,8 @@ public class ProductService {
         }
         if (error.hasError())
             return new ResponseEntity<Object>(error, HttpStatus.CONFLICT);
-        return new ResponseEntity<Object>(mapper.productToDto(rep.save(mapper.dtoToProduct(p))), HttpStatus.CREATED);
+        return new ResponseEntity<Object>(
+                productMapper.productToDto(productRepo.save(productMapper.dtoToProduct(p).setActive())),
+                HttpStatus.CREATED);
     }
 }

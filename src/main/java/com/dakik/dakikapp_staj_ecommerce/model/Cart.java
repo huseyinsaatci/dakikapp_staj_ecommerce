@@ -1,0 +1,32 @@
+package com.dakik.dakikapp_staj_ecommerce.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@Data
+@Entity
+@Table(name = "cart", schema = "dakikapp")
+public class Cart {
+
+    public Cart(int userId, int total) {
+        this.userId = userId;
+        this.total = total;
+    }
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    private int id;
+
+    @Column(name = "user_id")
+    private int userId;
+
+    private int total;
+}
