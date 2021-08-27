@@ -11,12 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 public interface CartRepository extends CrudRepository<Cart, Integer> {
-    Optional<Cart> findByUserId(int id);
-
-    @Transactional
-    @Modifying
-    @Query("UPDATE Cart SET total =?2 WHERE cartId = ?1")
-    void modifyTotal(int cartId, int total);
+    Optional<Cart> findByUserId(int userId);
 
     @Transactional
     @Modifying

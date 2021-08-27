@@ -4,13 +4,14 @@ import com.dakik.dakikapp_staj_ecommerce.dto.ProductDto;
 import com.dakik.dakikapp_staj_ecommerce.model.Product;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
-    ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
+    @Mapping(source = "id", target = "productId")
+    public ProductDto productToDto(Product p);
 
-    public ProductDto productToDto(Product u);
+    @Mapping(target = "id", source = "productId")
+    public Product dtoToProduct(ProductDto p);
 
-    public Product dtoToProduct(ProductDto u);
 }

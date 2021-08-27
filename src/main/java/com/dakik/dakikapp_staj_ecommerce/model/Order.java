@@ -15,12 +15,15 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "order", schema = "dakikapp")
 public class Order {
+
+    public Order(int userId) {
+        this.userId = userId;
+    }
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private int id;
 
     @Column(name = "user_id")
     private int userId;
-
-    private int total;
 }

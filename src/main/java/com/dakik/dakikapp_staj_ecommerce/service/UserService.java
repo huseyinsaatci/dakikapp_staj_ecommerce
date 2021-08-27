@@ -91,7 +91,7 @@ public class UserService {
             return new ResponseEntity<Object>(error, HttpStatus.CONFLICT);
         u.setPassword(passwordEncoder.encode(u.getPassword()));
         User createdUser = userRepo.save(userMapper.dtoToUser(u).setActive());
-        cartRepo.save(new Cart(createdUser.getId(), 0));
+        cartRepo.save(new Cart(createdUser.getId()));
         return new ResponseEntity<Object>(userMapper.userToDto(createdUser), HttpStatus.CREATED);
     }
 }

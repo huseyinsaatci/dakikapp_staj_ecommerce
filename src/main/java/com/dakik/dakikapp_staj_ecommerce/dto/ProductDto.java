@@ -11,6 +11,20 @@ import org.springframework.stereotype.Component;
 @Component
 @Data
 public class ProductDto {
+    public ProductDto() {
+    }
+
+    public ProductDto(int productId, int productCode, String productName, String imageUrl, int quantity) {
+        this.productId = productId;
+        this.productCode = productCode;
+        this.productName = productName;
+        this.imageUrl = imageUrl;
+        this.quantity = quantity;
+    }
+
+    @NotNull(message = "'product_id' cannot be null")
+    private int productId;
+
     @NotNull(message = "'product_code' cannot be null")
     private int productCode;
 
@@ -20,5 +34,5 @@ public class ProductDto {
     private String imageUrl;
 
     @PositiveOrZero(message = "'stock_quantity' must be bigger than zero")
-    private int stockQuantity;
+    private int quantity;
 }

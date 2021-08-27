@@ -6,9 +6,9 @@ import javax.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
-public class CartRequest {
-    @NotNull(message = "'cart_id' cannot be null")
-    private int cartId;
+public class AddItemRequest {
+    @NotNull(message = "'user_id' cannot be null")
+    private int userId;
 
     @NotNull(message = "'product_id' cannot be null")
     private int productId;

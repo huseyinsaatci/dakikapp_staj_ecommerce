@@ -15,10 +15,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "cart", schema = "dakikapp")
 public class Cart {
-
-    public Cart(int userId, int total) {
+    public Cart(int userId) {
         this.userId = userId;
-        this.total = total;
     }
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +25,4 @@ public class Cart {
 
     @Column(name = "user_id")
     private int userId;
-
-    private int total;
 }

@@ -1,6 +1,7 @@
 package com.dakik.dakikapp_staj_ecommerce.controller;
 
 import com.dakik.dakikapp_staj_ecommerce.dto.AuthRequest;
+import com.dakik.dakikapp_staj_ecommerce.dto.LoginResponse;
 import com.dakik.dakikapp_staj_ecommerce.model.User;
 import com.dakik.dakikapp_staj_ecommerce.repository.UserRepository;
 import com.dakik.dakikapp_staj_ecommerce.security.jwt.JwtUtil;
@@ -26,7 +27,7 @@ public class AuthenticationController {
     private UserRepository rep;
 
     @PostMapping("/login")
-    public String createToken(@RequestBody AuthRequest authRequest) throws Exception {
+    public LoginResponse createToken(@RequestBody AuthRequest authRequest) throws Exception {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
@@ -35,7 +36,8 @@ public class AuthenticationController {
         }
         final User user = rep.findByEmail(authRequest.getEmail()).get();
         final String jwt = jwtUtil.generateToken(user.getEmail());
+        LoginResponse loginResponse = new LoginResponse(jwt, user.getId());
 
-        return jwt;
+        return loginResponse;
     }
 }
