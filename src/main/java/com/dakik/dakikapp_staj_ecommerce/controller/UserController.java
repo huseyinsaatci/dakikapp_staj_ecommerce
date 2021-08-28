@@ -37,7 +37,7 @@ public class UserController {
         return userService.deleteUser(id);
     }
 
-    @PostMapping()
+    @PostMapping("/register")
     public ResponseEntity<Object> addUser(@Valid @RequestBody UserDto u) {
         return userService.addUser(u);
     }
