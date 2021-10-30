@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "order_item", schema = "dakikapp")
+@Table(name = "order_item", schema = "public")
 public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

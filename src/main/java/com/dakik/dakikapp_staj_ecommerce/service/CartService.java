@@ -56,6 +56,7 @@ public class CartService {
             response = items;
             statusCode = HttpStatus.OK;
         }, () -> {
+            System.out.println(userId);
             response = new ErrorResponse("User Not Found");
             statusCode = HttpStatus.NOT_FOUND;
         });

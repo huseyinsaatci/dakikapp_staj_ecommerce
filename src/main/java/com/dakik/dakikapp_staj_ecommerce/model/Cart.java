@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "cart", schema = "dakikapp")
+@Table(name = "cart", schema = "public")
 public class Cart {
     public Cart(int userId) {
         this.userId = userId;

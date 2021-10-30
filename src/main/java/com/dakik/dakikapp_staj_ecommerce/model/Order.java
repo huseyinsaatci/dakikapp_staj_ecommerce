@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "order", schema = "dakikapp")
+@Table(name = "order", schema = "public")
 public class Order {
 
     public Order(int userId) {

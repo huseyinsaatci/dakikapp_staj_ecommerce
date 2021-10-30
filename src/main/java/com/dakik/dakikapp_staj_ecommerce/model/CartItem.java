@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Entity
-@Table(name = "cart_item", schema = "dakikapp")
+@Table(name = "cart_item", schema = "public")
 @Data
 public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
